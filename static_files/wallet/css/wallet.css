@@ -1,0 +1,45 @@
+.wallet_info
+{
+    width: 70%;
+    border: 1px black solid;
+    border-radius: 15px;
+    padding:2%;
+}
+
+.wallet_qr
+{
+    width: 200px;
+    height: 200px;
+}
+
+.wallet_main_info
+{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    width: 70%;
+    margin-right: 2%;
+}
+.wallet_row
+{
+    width: 100%;
+    margin-bottom: 2%;
+    padding: 2px;
+    border-bottom: 1px solid black;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.copy_text_btn
+{
+    height: 15px;
+    width: 15px;
+    background-repeat: no-repeat;
+    background-size: 100%;
+}
+
+.copy_text_btn:hover
+{
+    cursor: pointer;
+}

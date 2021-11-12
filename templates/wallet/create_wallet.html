@@ -1,0 +1,15 @@
+{%  extends 'base.html' %}
+<head>
+    <title>{% block title%}Wallet{% endblock %}</title>
+</head>
+
+{% block content %}
+    {% if has_wallet %}
+        <div>You already has a wallet</div>
+        <a href="{% url 'wallet' %}">return</a>
+    {% else %}
+        <div>Please save these passphrase. You need it to confirm your tranzactions</div>
+        <div style="font-size: 24px"><b>{{ seed }}</b></div>
+        <a href="{% url 'wallet' %}">return</a>
+    {% endif %}
+{%  endblock %}
