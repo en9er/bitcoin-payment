@@ -6,7 +6,9 @@
     {% block title%}Wallet{% endblock %}
     {%  block additional_media1 %}
         <link rel="stylesheet" href="{% static "wallet/css/wallet.css" %}">
-        <script src="{% static 'wallet/js/transaction.js' %}"></script>
+        {% if has_walet %}
+            <script src="{% static 'wallet/js/transaction.js' %}"></script>
+        {% endif %}
         <script src="{% static 'wallet/js/background.js' %}"></script>
     {% endblock %}
 </head>
@@ -45,6 +47,23 @@
                     <a id="send_btn" href="#">Send</a>
                     <a id="receive_btn" href="#">Receive</a>
                 </div>
+
+                <a href="https://coinfaucet.eu/en/btc-testnet/">Get btc</a>
+                {% if messages %}
+                    {% for message in messages %}
+                        <div>{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+                <form method="POST" action="{% url 'wallet' %}">
+                    {% csrf_token %}
+                    <label for="mnemonic_field">Your mnemonic words</label>
+                    <input id="mnemonic_field" name="mnemonic" type="text">
+                    <label for="target_address_field">Wallet Address</label>
+                    <input id="target_address_field" name="target_address" type="text">
+                    <label for="amount_field">Amount</label>
+                    <input id="amount_field" name="amount" type="number" step="0.0001">
+                    <input type="submit" name="submit" value="Send">
+                </form>
             </div>
         {% else %}
             <div>You're not logged in</div>

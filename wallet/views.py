@@ -1,30 +1,42 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from account.models import CustomUser
 from . import HDwallet
 from wallet.models import Wallet
+from .forms import SendBtcForm
 import requests
+from django.contrib import messages
 
 
 def index(request):
-    user = CustomUser.objects.get(id=request.user.id)
-    if not user.has_wallet:
-        context = {'has_wallet': user.has_wallet}
-        return render(request, '../templates/wallet/wallet.html', context)
+    if request.method == 'POST':
+        msg = ""
+        form = SendBtcForm(request.POST)
+        if form.is_valid():
+            pk = form.cleaned_data['mnemonic']
+            msg = HDwallet.create_transaction(pk, form.cleaned_data['target_address'], form.cleaned_data['amount'])
+            messages.add_message(request, messages.INFO, msg)
+            print(msg)
+        return redirect('wallet')
     else:
-        address = user.wallet.address
-        request_str = 'https://api.blockcypher.com/v1/btc/test3/addrs/' + address
-        #request_str = 'https://api.blockcypher.com/v1/btc/test/addrs/' + address
-        response = requests.get(request_str).json()
-        if 'address' in response:
-            qr = HDwallet.get_qr_code(address)
-            balance = int(response['balance']) / 100000000.0
-            unconfirmed_balance = response['unconfirmed_balance'] / 100000000.0
-            qr_path = '../../static/wallet/img/' + address + ".png"
-            context = {'error': False, 'balance': balance, 'unconfirmed_balance': unconfirmed_balance, 'address': address, 'qr_path': qr_path, 'has_wallet': user.has_wallet}
+        user = CustomUser.objects.get(id=request.user.id)
+        if not user.has_wallet:
+            context = {'has_wallet': user.has_wallet}
+            return render(request, '../templates/wallet/wallet.html', context)
         else:
-            context = {'error': True, 'has_wallet': user.has_wallet}
-        return render(request, '../templates/wallet/wallet.html', context)
+            address = user.wallet.address
+            request_str = 'https://api.blockcypher.com/v1/btc/test3/addrs/' + address
+            #request_str = 'https://api.blockcypher.com/v1/btc/test/addrs/' + address
+            response = requests.get(request_str).json()
+            if 'address' in response:
+                qr = HDwallet.get_qr_code(address)
+                balance = int(response['balance']) / 100000000.0
+                unconfirmed_balance = response['unconfirmed_balance'] / 100000000.0
+                qr_path = '../../static/wallet/img/' + address + ".png"
+                context = {'error': False, 'balance': balance, 'unconfirmed_balance': unconfirmed_balance, 'address': address, 'qr_path': qr_path, 'has_wallet': user.has_wallet}
+            else:
+                context = {'error': True, 'has_wallet': user.has_wallet}
+            return render(request, '../templates/wallet/wallet.html', context)
 
 
 def create_wallet(request):

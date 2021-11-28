@@ -1,6 +1,10 @@
 {%  extends 'base.html' %}
+{% load static %}
 <head>
     <title>{% block title%}Wallet{% endblock %}</title>
+    {%  block additional_media1 %}
+        <script src="{% static "wallet/js/download_key.js" %}"></script>
+    {% endblock %}
 </head>
 
 {% block content %}
@@ -9,7 +13,7 @@
         <a href="{% url 'wallet' %}">return</a>
     {% else %}
         <div>Please save these passphrase. You need it to confirm your tranzactions</div>
-        <div style="font-size: 24px"><b>{{ seed }}</b></div>
+        <div id="key" style="font-size: 24px"><b>{{ seed }}</b></div>
         <a href="{% url 'wallet' %}">return</a>
     {% endif %}
 {%  endblock %}

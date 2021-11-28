@@ -9,6 +9,7 @@ from typing import Optional
 import json
 import qrcode
 import shutil
+from bit import PrivateKeyTestnet
 from BitcoinPayment.settings import STATIC_URL
 import os
 
@@ -20,6 +21,21 @@ def get_qr_code(address):
         img = qrcode.make(address)
         path = f"static_files/wallet/img/{address}" + ".png"
         img.save(path)
+
+
+def create_raw_transaction(pk, target_address, amount):
+    pk = PrivateKeyTestnet(wif=pk)
+    try:
+        r = pk.send([(target_address, amount, 'btc')])
+        return f'{amount} BTC was sent on {target_address}'
+    except Exception as ex:
+        return ex.args[0]
+
+
+def create_transaction(mnemonic, target_address, amount):
+    wallet = create_wallet_from_mnemonic(mnemonic)
+    private_key = wallet.wif()
+    return create_raw_transaction(private_key, target_address, amount)
 
 
 def create_wallet_from_path(path, symbol=COIN):
@@ -38,18 +54,12 @@ def create_wallet_from_mnemonic(mnemonic, symbol=COIN):
 
 
 def create_wallet(symbol=COIN):
-    # Choose strength 128, 160, 192, 224 or 256
     STRENGTH: int = 128  # Default is 128
-    # Choose language english, french, italian, spanish, chinese_simplified, chinese_traditional, japanese or korean
     LANGUAGE: str = "english"  # Default is english
-    # Generate new entropy hex string
     ENTROPY: str = generate_entropy(strength=STRENGTH)
-    # Secret passphrase for mnemonic
     PASSPHRASE: Optional[str] = None  # "meherett"
 
-    # Initialize Bitcoin mainnet HDWallet
     hdwallet: HDWallet = HDWallet(symbol)
-    # Get Bitcoin HDWallet from entropy
     hdwallet.from_entropy(
         entropy=ENTROPY, language=LANGUAGE, passphrase=PASSPHRASE
     )
