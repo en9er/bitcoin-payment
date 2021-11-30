@@ -2,9 +2,32 @@
 {%  load static %}
 <head>
     <title>{% block title%}Shop{% endblock %}</title>
+    {%  block additional_media1 %}
+        <link rel="stylesheet" href="{% static "shop/css/shop_index.css" %}">
+        {% if has_walet %}
+            <script src="{% static 'wallet/js/transaction.js' %}"></script>
+        {% endif %}
+    {% endblock %}
 </head>
+
+{% block menu %}
+    <a href="{% url 'index' %}" class="header_title">Marketplace</a>
+{% endblock %}
 {% block content %}
     <body>
-    <h2>shop</h2>
+    {% if request.user.id %}
+        <a class="add_product_btn" href="{% url 'add_product' %}">+</a>
+    {% endif %}
+
+    <div class="row">
+        {% for card in cards %}
+            <div class="card">
+                <div class="card_content" style="background-color: aliceblue; background-image: url({{ card.image.url }})">
+                    <svg class="card_preview_button" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="gray"><path  d="M0 0h24v24H0V0z" fill="none"/><path id="full_size_icon" d="M3 5v4h2V5h4V3H5c-1.1 0-2 .9-2 2zm2 10H3v4c0 1.1.9 2 2 2h4v-2H5v-4zm14 4h-4v2h4c1.1 0 2-.9 2-2v-4h-2v4zm0-16h-4v2h4v4h2V5c0-1.1-.9-2-2-2z"/></svg>
+                </div>
+                <a class="card_button flex_centerXY" href="view/card/{{ card.slug }}">{{ card.price }}₿</a>
+            </div>
+        {% endfor %}
+    </div>
     </body>
 {% endblock %}
