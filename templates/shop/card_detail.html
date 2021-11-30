@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Details</title>
+</head>
+<body>
+<img src="{{card.image.url}}" alt="card_image">
+<div>{{ card.title }}</div>
+<div>Description: {{ card.description }}</div>
+<div>Price: {{ card.price }}</div>
+<div>Favorite: {{ card.favorite }}</div>
+<div>Views: {{ card.views }}</div>
+<div>Category: {{ card.category  }}</div>
+<div>Owned by: {{ card.owner.username }}</div>
+<div>Added: {{ card.creation_time }}</div>
+</body>
+</html>
