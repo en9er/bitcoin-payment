@@ -1,18 +1,53 @@
+{% extends 'base.html' %}
+{%  load static %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Details</title>
+    <title>{% block title%}Shop{% endblock %}</title>
+    {%  block additional_media1 %}
+        <link rel="stylesheet" href="{% static "shop/css/card_details.css" %}">
+        <link rel="stylesheet" href="{% static "shop/css/shop_index.css" %}">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;500;700&display=swap" rel="stylesheet">
+    {% endblock %}
 </head>
-<body>
-<img src="{{card.image.url}}" alt="card_image">
-<div>{{ card.title }}</div>
-<div>Description: {{ card.description }}</div>
-<div>Price: {{ card.price }}</div>
-<div>Favorite: {{ card.favorite }}</div>
-<div>Views: {{ card.views }}</div>
-<div>Category: {{ card.category  }}</div>
-<div>Owned by: {{ card.owner.username }}</div>
-<div>Added: {{ card.creation_time }}</div>
-</body>
+
+{% block content %}
+    <div class="content">
+        <div class="card">
+            <div class="card_content" style="background-color: aliceblue; background-image: url({{ card.image.url }})">
+                <svg class="card_like_button" width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M15.1249 2.75C13.5299 2.75 11.9991 3.4925 10.9999 4.66583C10.0008 3.4925 8.46992 2.75 6.87492 2.75C4.05159 2.75 1.83325 4.96833 1.83325 7.79167C1.83325 11.2567 4.94992 14.08 9.67075 18.37L10.9999 19.5708L12.3291 18.3608C17.0499 14.08 20.1666 11.2567 20.1666 7.79167C20.1666 4.96833 17.9483 2.75 15.1249 2.75ZM11.0916 17.0042L10.9999 17.0958L10.9083 17.0042C6.54492 13.0533 3.66659 10.4408 3.66659 7.79167C3.66659 5.95833 5.04159 4.58333 6.87492 4.58333C8.28659 4.58333 9.66159 5.49083 10.1474 6.74667H11.8616C12.3383 5.49083 13.7133 4.58333 15.1249 4.58333C16.9583 4.58333 18.3333 5.95833 18.3333 7.79167C18.3333 10.4408 15.4549 13.0533 11.0916 17.0042Z" fill="gray"/>
+                </svg>
+                <svg class="card_preview_button" xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px" fill="gray"><path  d="M0 0h24v24H0V0z" fill="none"/><path id="full_size_icon" d="M3 5v4h2V5h4V3H5c-1.1 0-2 .9-2 2zm2 10H3v4c0 1.1.9 2 2 2h4v-2H5v-4zm14 4h-4v2h4c1.1 0 2-.9 2-2v-4h-2v4zm0-16h-4v2h4v4h2V5c0-1.1-.9-2-2-2z"/></svg>
+            </div>
+            {% if card.owner != request.user %}
+                <a class="card_button flex_centerXY" href="{% url 'product_detail' card.slug %}">{{ card.price }}₿</a>
+            {% endif %}
+        </div>
+        <div class="card_info">
+            <div class="card_creator">Creator: {{ card.creator }}</div>
+            <div class="card_title">{{ card.title }}</div>
+            <div class="card_description">The {{ card.description }} Lorem ipsum dolor sit amet, consectetur adipisicing elit. Assumenda dolores eligendi, explicabo harum ipsam maiores nostrum praesentium, quae, quisquam saepe totam veniam. Architecto aut consequatur distinctio id necessitatibus sapiente vel.</div>
+            <div class="card_otherinfo">
+                <div><b>Owned by: {{ card.owner.username }}</b></div>
+                <div class="card_otherinfo__right">
+                    <div style="display: flex; align-items: center; width: 50%">
+                        <img src="{% static 'shop/res/images/views.svg' %}" alt="views">
+                        <div style="margin-left: 5%">{{ card.views }} views</div>
+                    </div>
+                    <div style="display: flex; align-items: center; width: 50%">
+                        <svg width="22" height="22" viewBox="0 0 22 22" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M15.1249 2.75C13.5299 2.75 11.9991 3.4925 10.9999 4.66583C10.0008 3.4925 8.46992 2.75 6.87492 2.75C4.05159 2.75 1.83325 4.96833 1.83325 7.79167C1.83325 11.2567 4.94992 14.08 9.67075 18.37L10.9999 19.5708L12.3291 18.3608C17.0499 14.08 20.1666 11.2567 20.1666 7.79167C20.1666 4.96833 17.9483 2.75 15.1249 2.75ZM11.0916 17.0042L10.9999 17.0958L10.9083 17.0042C6.54492 13.0533 3.66659 10.4408 3.66659 7.79167C3.66659 5.95833 5.04159 4.58333 6.87492 4.58333C8.28659 4.58333 9.66159 5.49083 10.1474 6.74667H11.8616C12.3383 5.49083 13.7133 4.58333 15.1249 4.58333C16.9583 4.58333 18.3333 5.95833 18.3333 7.79167C18.3333 10.4408 15.4549 13.0533 11.0916 17.0042Z" fill="black"/>
+                        </svg>
+                        <div style="margin-left: 5%">{{ card.favorite }} favorite
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
 </html>
