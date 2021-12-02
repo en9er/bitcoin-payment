@@ -68,8 +68,13 @@ a
     height: 15%;
     border-radius: 19px;
     border: 1px gray solid;
+    transition: .3s;
 }
 
+.card_button:hover
+{
+    background-color: #32ac63;
+}
 .card_preview_button
 {
     position: absolute;
@@ -78,6 +83,19 @@ a
     transition: .3s;
 }
 
+.card_like_button
+{
+    position: absolute;
+    left: 5%;
+    bottom: 5%;
+    transition: .3s;
+}
+.card_like_button:hover
+{
+    cursor: pointer;
+}
+
+
 .card_preview_button:hover
 {
     cursor: pointer;
@@ -85,6 +103,11 @@ a
 #full_size_icon
 {
     transition: .3s;
+}
+
+.card_like_button:hover #heart
+{
+    fill: #303030;
 }
 .card_preview_button:hover #full_size_icon
 {

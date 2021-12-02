@@ -4,9 +4,6 @@
     <title>{% block title%}Shop{% endblock %}</title>
     {%  block additional_media1 %}
         <link rel="stylesheet" href="{% static "shop/css/shop_index.css" %}">
-        {% if has_walet %}
-            <script src="{% static 'wallet/js/transaction.js' %}"></script>
-        {% endif %}
     {% endblock %}
 </head>
 
@@ -14,7 +11,6 @@
     <a href="{% url 'index' %}" class="header_title">Marketplace</a>
 {% endblock %}
 {% block content %}
-    <body>
     {% if request.user.id %}
         <a class="add_product_btn" href="{% url 'add_product' %}">+</a>
     {% endif %}
@@ -29,5 +25,4 @@
             </div>
         {% endfor %}
     </div>
-    </body>
 {% endblock %}

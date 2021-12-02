@@ -47,13 +47,14 @@ class Card(models.Model):
     MAX_RESOLUTION = (2000, 3000)
     MAX_IMAGE_SIZE = 5242880
     image = models.ImageField()
-    owner = models.ForeignKey(to=CustomUser, on_delete=models.CASCADE)
+    owner = models.ForeignKey(to=CustomUser, on_delete=models.CASCADE, related_name='owner', null=True)
+    creator = models.ForeignKey(to=CustomUser, on_delete=models.CASCADE, related_name='creator', null=True)
     title = models.CharField(max_length=128)
     creation_time = models.DateTimeField(default=datetime.datetime.now())
     description = models.CharField(max_length=512)
     price = models.FloatField()
-    favorite = models.IntegerField(default=0)
-    views = models.IntegerField(default=0)
+    favorite = models.PositiveIntegerField(default=0)
+    views = models.PositiveIntegerField(default=0)
     category = models.ForeignKey(to=Category, verbose_name="Category", on_delete=models.SET_DEFAULT, default=None, null=True)
     slug = models.SlugField(unique=True)
 
