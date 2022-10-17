@@ -1,4 +1,5 @@
 from django.db import models
+from django.utils import timezone
 from account.models import CustomUser
 from PIL import Image
 from django.urls import reverse
@@ -41,6 +42,9 @@ class Category(models.Model):
     def __str__(self):
         return self.name
 
+    class Meta:
+        verbose_name_plural = 'Categories'
+
 
 class Card(models.Model):
     MIN_RESOLUTION = (300, 400)
@@ -50,12 +54,17 @@ class Card(models.Model):
     owner = models.ForeignKey(to=CustomUser, on_delete=models.CASCADE, related_name='owner', null=True)
     creator = models.ForeignKey(to=CustomUser, on_delete=models.CASCADE, related_name='creator', null=True)
     title = models.CharField(max_length=128)
-    creation_time = models.DateTimeField(default=datetime.datetime.now())
+    creation_time = models.DateTimeField(default=timezone.now())
     description = models.CharField(max_length=512)
-    price = models.FloatField()
+    price = models.FloatField(default=0)
     favorite = models.PositiveIntegerField(default=0)
     views = models.PositiveIntegerField(default=0)
-    category = models.ForeignKey(to=Category, verbose_name="Category", on_delete=models.SET_DEFAULT, default=None, null=True)
+    category = models.ForeignKey(to=Category,
+                                 verbose_name="Category",
+                                 on_delete=models.SET_DEFAULT,
+                                 default=None,
+                                 null=True
+                                 )
     slug = models.SlugField(unique=True)
 
     def __str__(self):

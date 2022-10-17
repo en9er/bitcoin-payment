@@ -18,7 +18,7 @@ COIN = BTCTEST
 
 def get_qr_code(address):
     if not os.path.isfile("static_files/wallet/img/" + address + ".png"):
-        img = qrcode.make(address)
+        img = qrcode.make('https://www.blockchain.com/btc-testnet/address/' + address)
         path = f"static_files/wallet/img/{address}" + ".png"
         img.save(path)
 

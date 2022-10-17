@@ -9,4 +9,4 @@ class CustomUser(AbstractUser):
     has_wallet = models.BooleanField(default=False)
     wallet = models.OneToOneField(Wallet, on_delete=models.CASCADE, null=True)
     # if your additional field is a required field, just add it, don't forget to add 'email' field too.
-    REQUIRED_FIELDS = ['has_wallet']
+    REQUIRED_FIELDS = ['has_wallet', 'email']

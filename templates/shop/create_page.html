@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+{%  load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title%} Bpay | Create {% endblock %}</title>
+    {%  block additional_media1 %}
+        <link rel="stylesheet" href="{% static "shop/css/card_details.css" %}">
+        <link rel="stylesheet" href="{% static "shop/css/shop_index.css" %}">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;500;700&display=swap" rel="stylesheet">
+    {% endblock %}
+</head>
+{% block menu %}
+    <a href="{% url 'index' %}" class="header_title">Create</a>
+{% endblock %}
+{% block content %}
+    <div class="content" style="display: flex; justify-content: center">
+        <form class="form_card_info" method="POST" enctype="multipart/form-data" style="margin-top: 6%; position: relative">
+            {% csrf_token %}
+            <div class="create_form_upload">
+                <input class="create_form_upload_input" name="image" type="file" accept="image/*">
+            </div>
+            <div class="create_form_info">
+                <label class="form_input_label" for="name">
+                    Name
+                    <input class="form_input_field" type="text" name="title">
+                </label>
+                <label class="form_input_label" for="description">
+                    Description
+                    <input class="form_input_field" type="text" name="description">
+                </label>
+                <label class="form_input_label" for="description">
+                    Category
+                    <select class="form_input_field"  name="category">
+                        <option disabled selected>Choose category...</option>
+                        {% for category in categories %}
+                            <option value="{{ category }}">{{ category }}</option>
+                        {% endfor %}
+                    </select>
+                </label>
+            </div>
+            <input class="create_form_button" type="submit" title="Create">
+        </form>
+    {% if err_message %}
+        <div>{{ err_message }}</div>
+    {% endif %}
+    </div>
+{% endblock %}
+</html>

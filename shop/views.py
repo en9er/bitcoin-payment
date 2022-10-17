@@ -1,7 +1,12 @@
-from django.shortcuts import render
+import random
+import string
+import time
+
+from django.shortcuts import render, redirect
 from django.http import HttpResponse
 from django.views.generic import DetailView
-from shop.models import Card, LatestProducts
+from shop.models import Card, LatestProducts, Category
+from .forms import CreateCardForm
 
 
 def index(request):
@@ -12,9 +17,29 @@ def index(request):
     return render(request, '../templates/shop/shop.html', context)
 
 
-
-def add_product(request):
-    return HttpResponse("Create smth")
+def create_card(request):
+    categories = Category.objects.all()
+    if request.method == 'POST':
+        create_form = CreateCardForm(request.POST, request.FILES or None)
+        category = request.POST.get('category')
+        if create_form.is_valid():
+            create_form.title = create_form.cleaned_data.get('card_name')
+            create_form.description = create_form.cleaned_data.get('card_description')
+            create_form.image = create_form.cleaned_data.get('card_image')
+            card = create_form.save()
+            card.owner = request.user
+            card.creator = request.user
+            card.slug = ''.join(random.choice(string.ascii_uppercase + string.digits) for _ in range(24))
+            if category:
+                card.category = categories.filter(name=category).get()
+            card.save()
+            return redirect("index")
+        else:
+            context = {"err_message": create_form.errors, "categories": categories}
+            return render(request, '../templates/shop/create_page.html', context)
+    else:
+        context = {"err_message": None, "categories": categories}
+        return render(request, '../templates/shop/create_page.html', context)
 
 
 class CardDetailView(DetailView):

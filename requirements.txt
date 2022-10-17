@@ -1,0 +1,3 @@
+hdwallet
+qrcode
+bit

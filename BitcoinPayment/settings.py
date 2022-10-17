@@ -7,7 +7,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = open("D:/SECRET_KEY.txt")
+SECRET_KEY = 'the real secret key'
 
 
 
@@ -26,9 +26,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'wallet',
     'account',
+    'wallet',
     'shop',
+
 ]
 
 MIDDLEWARE = [
@@ -69,7 +70,7 @@ WSGI_APPLICATION = 'BitcoinPayment.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': str(BASE_DIR / 'db.sqlite3'),
     }
 }
 
